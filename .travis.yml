@@ -13,6 +13,6 @@ deploy:
   skip_cleanup: true
   github_token: $github_token
   local_dir: build
-  if: type = pull_request AND branch IN (master, dev)
+  if: type = pull_request AND (branch = master OR branch = dev)
   on:
     branch: master
