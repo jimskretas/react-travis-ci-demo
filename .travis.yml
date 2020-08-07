@@ -13,6 +13,5 @@ deploy:
   skip_cleanup: true
   github_token: $github_token
   local_dir: build
-  target_branch: gh-pages
   on:
     condition: type = pull_request AND (branch = master OR branch = dev)
