@@ -14,4 +14,5 @@ deploy:
   github_token: $github_token
   local_dir: build
   on:
-    condition: type = pull_request AND (branch = master OR branch = dev)
+    # condition: type = pull_request AND (branch = master OR branch = dev)
+    branch: master
