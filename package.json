@@ -2,6 +2,7 @@
   "name": "react-travis-ci-demo",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://jimskretas.github.io/react-travis-ci-demo/",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
