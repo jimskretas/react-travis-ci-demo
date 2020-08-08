@@ -4,16 +4,24 @@ node_js:
 cache:
   directories:
     - node_modules
-    - public
-    - .cache
-script:
-  - npm test
-  - npm run test:coverage
-  - npm run build
-deploy:
-  provider: pages
-  skip_cleanup: true
-  github_token: $github_token
-  local_dir: build
-  target_branch: gh-pages
-  if: type = pull_request AND (branch = master OR branch = dev)
+jobs:
+  include:
+    - stage: test
+      script:
+        - npm test
+        - npm run test:coverage
+    - stage: deploy
+      script:
+        - npm run build
+      deploy:
+        provider: pages
+        skip_cleanup: true
+        github_token: $github_token
+        local_dir: build
+        target_branch: gh-pages
+        if: type = pull_request AND (branch = master OR branch = dev)
+stages:
+  - name: test
+    if: type = pull_request
+  - name: deploy
+    if: type = push AND (branch = master OR branch = dev)
