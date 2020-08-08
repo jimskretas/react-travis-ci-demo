@@ -12,16 +12,25 @@ jobs:
       script:
         - npm test
         - npm run test:coverage
+        - npm run build
+      after_success:
+        - bash ./scripts/deploy.sh
+      branch:
+        - master
+        - dev
     - stage: deploy
       script:
         - npm run build
       after_success:
         - bash ./scripts/deploy.sh
+      branch:
+        - master
+        - dev
 stages:
   - name: test
     if: type = pull_request
   - name: deploy
-    if: type = push AND (branch = master OR branch = dev)
+    if: type = push
 env:
   global:
     - GH_USER: jimskretas
