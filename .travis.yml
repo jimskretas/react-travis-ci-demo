@@ -4,24 +4,34 @@ node_js:
 cache:
   directories:
     - node_modules
+notifications:
+  email: false
 jobs:
   include:
     - stage: test
       script:
         - npm test
         - npm run test:coverage
+        - npm run build
+      after_success:
+        - bash ./scripts/deploy.sh
+      branch:
+        - master
+        - dev
     - stage: deploy
       script:
         - npm run build
-      deploy:
-        provider: pages
-        skip_cleanup: true
-        github_token: $github_token
-        local_dir: build
-        target_branch: gh-pages
-        if: type = pull_request AND (branch = master OR branch = dev)
+      after_success:
+        - bash ./scripts/deploy.sh
+      branch:
+        - master
+        - dev
 stages:
   - name: test
     if: type = pull_request
   - name: deploy
-    if: type = push AND (branch = master OR branch = dev)
+    if: type = push
+env:
+  global:
+    - GH_USER: jimskretas
+    - GH_REPO: react-travis-ci-demo
