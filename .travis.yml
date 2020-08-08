@@ -13,8 +13,7 @@ jobs:
         - npm test
         - npm run test:coverage
         - npm run build
-      after_success:
-        - bash ./scripts/deploy.sh
+        - npm run deploy
       branch:
         - master
         - dev
