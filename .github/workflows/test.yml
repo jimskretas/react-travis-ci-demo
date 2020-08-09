@@ -42,6 +42,7 @@ jobs:
       - run: chmod +x ./cc-test-reporter
       - run: ./cc-test-reporter before-build
       - run: npm test -- --coverage
-      - run: ./cc-test-reporter after-build --exit-code $?
+      - run: ./cc-test-reporter after-build --debug --exit-code $?
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+          GIT_BRANCH: ${{ github.head_ref }}
