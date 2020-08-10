@@ -21,7 +21,21 @@ jobs:
       - run: npm test
       - run: npm run build
   coverage:
-    uses: marsam/codeclimate-action@master
-    with:
-      command: npm run test:coverage
-      reporter-id: ${{ secrets.CC_TEST_REPORTER_ID }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm install
+      - run: npm run build
+      - uses: marsam/codeclimate-action@master
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        with:
+          coverageCommand: npm run test:coverage
