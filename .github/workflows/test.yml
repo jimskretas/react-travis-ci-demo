@@ -23,35 +23,8 @@ jobs:
       - uses: paambaati/codeclimate-action@v2.6.0
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+          GIT_BRANCH: ${{ github.base_ref }}
         with:
           coverageCommand: npm run test:coverage
           debug: true
           coverageLocations: ${{github.workspace}}/coverage/lcov.info:lcov
-  # coverage:
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       node-version: [14.x]
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: actions/setup-node@v1
-  #       with:
-  #         node-version: ${{ matrix.node-version }}
-  #     - run: npm install
-  #     - run: npm run build
-  #     - uses: paambaati/codeclimate-action@v2.6.0
-  #       env:
-  #         CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-  #       with:
-  #         coverageCommand: npm run test:coverage
-  # codacy-coverage-reporter:
-  #   needs: [test]
-  #   runs-on: ubuntu-latest
-  #   name: codacy-coverage-reporter
-  #   steps:
-  #     - uses: actions/checkout@master
-  #     - name: Run codacy-coverage-reporter
-  #       uses: codacy/codacy-coverage-reporter-action@master
-  #       with:
-  #         project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-  #         coverage-reports: lcov.info
