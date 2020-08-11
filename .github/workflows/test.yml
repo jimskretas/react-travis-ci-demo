@@ -22,8 +22,8 @@ jobs:
       - run: npm run test:coverage
       - run: npm run build
       - name: Run codacy-coverage-reporter
-        run: bash <(curl -Ls https://coverage.codacy.com/get.sh)
-        with:
+      - run: bash <(curl -Ls https://coverage.codacy.com/get.sh)
+        env:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
           coverage-reports: coverage/lcov.info
   # coverage:
