@@ -18,14 +18,15 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm install
-      - run: npm test
-      - run: npm run test:coverage
       - run: npm run build
-      - name: Run codacy-coverage-reporter
-      - run: bash <(curl -Ls https://coverage.codacy.com/get.sh)
+      - run: npm test
+      - uses: paambaati/codeclimate-action@v2.2.6
         env:
-          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: coverage/lcov.info
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        with:
+          coverageCommand: npm run test:coverage
+          debug: true
+          coverageLocations: ${{github.workspace}}/coverage/lcov.info:lcov
   # coverage:
   #   runs-on: ubuntu-latest
   #   strategy:
