@@ -13,16 +13,13 @@ jobs:
         node-version: [14.x]
 
     steps:
-      - name: Setup
-        uses: actions/checkout@v2
-        uses: actions/setup-node@v1
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Build
-        run: npm install
-        run: npm run build
-      - name: Test
-        run: npm test
+      - run: npm install
+      - run: npm run build
+      - run: npm test
       - name: Test Coverage for source branch
         if: ${{ success() }}
         uses: paambaati/codeclimate-action@v2.6.0
@@ -35,9 +32,8 @@ jobs:
   deploy-heroku:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to heroku
-        uses: actions/checkout@v2
-        uses: akhileshns/heroku-deploy@v3.4.6
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.4.6
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "cicd-demo-react"
