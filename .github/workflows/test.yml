@@ -13,18 +13,32 @@ jobs:
         node-version: [14.x]
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - name: Setup
+        uses: actions/checkout@v2
+        uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm install
-      - run: npm run build
-      - run: npm test
-      - uses: paambaati/codeclimate-action@v2.6.0
+      - name: Build
+        run: npm install
+        run: npm run build
+      - name: Test
+        run: npm test
+      - name: Test Coverage for source branch
+        if: ${{ success() }}
+        uses: paambaati/codeclimate-action@v2.6.0
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-          GIT_BRANCH: ${{ github.head_ref }}
         with:
           coverageCommand: npm run test:coverage
           debug: true
           coverageLocations: ${{github.workspace}}/coverage/lcov.info:lcov
+  deploy-heroku:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to heroku
+        uses: actions/checkout@v2
+        uses: akhileshns/heroku-deploy@v3.4.6
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "cicd-demo-react"
+          heroku_email: "jimskretas@gmail.com"
