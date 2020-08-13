@@ -6,23 +6,23 @@ on:
     branches: [master]
 
 jobs:
-  deploy:
+  deploy-master:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
         node-version: [14.x]
 
-    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true && github.base_ref == "master"
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+      - uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm install
       - run: npm run build
-      - run: |
+      - name: Deploy to gh-pages
+        run: |
           git config --global user.name $user_name
           git config --global user.email $user_email
           git remote set-url origin https://${github_token}@github.com/${repository}
@@ -32,49 +32,3 @@ jobs:
           user_email: "github-actions[bot]@users.noreply.github.com"
           github_token: ${{ secrets.ACTIONS_DEPLOY_ACCESS_TOKEN }}
           repository: ${{ github.repository }}
-  coverage-head:
-    needs: [deploy]
-
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [14.x]
-
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-      - run: npm install
-      - run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-      - run: chmod +x ./cc-test-reporter
-      - run: ./cc-test-reporter before-build
-      - run: npm test -- --coverage
-      - run: ./cc-test-reporter after-build --debug --exit-code $?
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-          GIT_BRANCH: ${{ github.head_ref }}
-  coverage-base:
-    needs: [coverage-head]
-
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [14.x]
-
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-      - run: npm install
-      - run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-      - run: chmod +x ./cc-test-reporter
-      - run: ./cc-test-reporter before-build
-      - run: npm test -- --coverage
-      - run: ./cc-test-reporter after-build --debug --exit-code $?
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-          GIT_BRANCH: ${{ github.base_ref }}
