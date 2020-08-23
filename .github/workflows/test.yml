@@ -28,16 +28,16 @@ jobs:
       #     debug: true
       #     coverageLocations: ${{github.workspace}}/coverage/lcov.info:lcov
       - run: npm run test:coverage
-      - run: export CODACY_PROJECT_TOKEN=${{ secrets.CODACY_PROJECT_TOKEN }}
-      - run: bash <(curl -Ls https://coverage.codacy.com/get.sh)
+      # - run: export CODACY_PROJECT_TOKEN=${{ secrets.CODACY_PROJECT_TOKEN }}
+      # - run: bash <(curl -Ls https://coverage.codacy.com/get.sh)
       # - name: Codacy-Coverage
       #   if: ${{ success() }}
       #   run: cat ./coverage/lcov.info | codacy-coverage --token $token
       #   env:
       #     token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-      # - name: Run codacy-coverage-reporter
-      #   uses: codacy/codacy-coverage-reporter-action@master
-      #   with:
-      #     project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-      #     coverage-reports: lcov.info
-      # - run: npm run build
+      - name: Run codacy-coverage-reporter
+        uses: codacy/codacy-coverage-reporter-action@master
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: coverage/lcov.info
+      - run: npm run build
