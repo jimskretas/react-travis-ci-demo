@@ -19,11 +19,17 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm install
       - run: npm run build
-      - name: Test Coverage for source branch
-        uses: paambaati/codeclimate-action@v2.6.0
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+      # - name: Test Coverage for source branch
+      #   uses: paambaati/codeclimate-action@v2.6.0
+      #   env:
+      #     CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+      #   with:
+      #     coverageCommand: npm run test:coverage
+      #     debug: true
+      #     coverageLocations: ${{github.workspace}}/coverage/lcov.info:lcov
+      - run: npm run test:coverage
+      - name: Run codacy-coverage-reporter
+        uses: codacy/codacy-coverage-reporter-action@master
         with:
-          coverageCommand: npm run test:coverage
-          debug: true
-          coverageLocations: ${{github.workspace}}/coverage/lcov.info:lcov
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: lcov.info
