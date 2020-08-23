@@ -28,6 +28,7 @@ jobs:
       #     debug: true
       #     coverageLocations: ${{github.workspace}}/coverage/lcov.info:lcov
       - run: npm run test:coverage
+      - run: export CODACY_PROJECT_TOKEN=${{ secrets.CODACY_PROJECT_TOKEN }}
       - run: bash <(curl -Ls https://coverage.codacy.com/get.sh)
       # - name: Codacy-Coverage
       #   if: ${{ success() }}
