@@ -23,6 +23,16 @@ jobs:
         uses: paambaati/codeclimate-action@v2.6.0
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+          GIT_BRANCH: ${{ github.head_ref }}
+        with:
+          coverageCommand: npm run test:coverage
+          debug: true
+          coverageLocations: ${{github.workspace}}/coverage/lcov.info:lcov
+      - name: Test Coverage for source branch
+        uses: paambaati/codeclimate-action@v2.6.0
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+          GIT_BRANCH: ${{ github.base_ref }}
         with:
           coverageCommand: npm run test:coverage
           debug: true
