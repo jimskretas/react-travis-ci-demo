@@ -21,14 +21,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm install
       - run: npm run build
-      - name: Test Coverage for source branch
-        uses: paambaati/codeclimate-action@v2.6.0
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-        with:
-          coverageCommand: npm run coverage
-          debug: true
-          coverageLocations: ${{github.workspace}}/coverage/lcov.info:lcov
       - name: Deploy to gh-pages
         run: |
           git config --global user.name $user_name
