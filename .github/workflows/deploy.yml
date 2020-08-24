@@ -21,18 +21,16 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm install
       - run: npm run build
-      - name: Test coverage for master branch
-        run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-        run: chmod +x ./cc-test-reporter
-        run: ./cc-test-reporter before-build
-        run: npm run test:coverage
-        run: ./cc-test-reporter after-build --debug --exit-code $?
+      - name: Test coverage for master
+        run: |
+          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+          chmod +x ./cc-test-reporter
+          ./cc-test-reporter before-build
+          npm run test:coverage
+          ./cc-test-reporter after-build --debug --exit-code $?
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
           GIT_BRANCH: ${{ github.base_ref }}
-        with:
-          coverageCommand: npm run test:coverage
-          coverageLocations: ${{github.workspace}}/coverage/lcov.info:lcov
       - name: Deploy to gh-pages
         run: |
           git config --global user.name $user_name
