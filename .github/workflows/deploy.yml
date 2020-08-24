@@ -31,9 +31,6 @@ jobs:
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
           GIT_BRANCH: ${{ github.base_ref }}
-        with:
-          coverageCommand: npm run test:coverage
-          coverageLocations: ${{github.workspace}}/coverage/lcov.info:lcov
       - name: Deploy to gh-pages
         run: |
           git config --global user.name $user_name
